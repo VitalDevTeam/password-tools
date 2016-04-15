@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href='https://fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+
+    <title>Password Tools | Vital</title>
+
+</head>
+<body id="page-body">
+
+    <header class="site-header">
+        <h1><img class="logo" src="img/vital-logo.png" alt="Vital"></h1>
+        <h2>Password Tools</h2>
+    </header>
+
+    <div class="main">
+
+        <section class="pw-test tool">
+
+            <div class="pw-test-header">
+                <h3>Password Strength Test</h3>
+                <!--
+                Password Strength Test based on zxcvbn
+                https://blogs.dropbox.com/tech/2012/04/zxcvbn-realistic-password-strength-estimation/
+                -->
+            </div>
+
+            <div id="pw-test-field" class="pw-test-field">
+                <label for="pw-test-input" class="screen-reader-text">Password</label>
+                <div class="pw-test-input-wrap">
+                    <input id="pw-test-input" class="pw-test-input" name="password" type="password" placeholder="Enter password" spellcheck="false">
+                    <div class="pw-test-results-wrap">
+                        <div id="pw-test-score" class="pw-test-score"></div>
+                    </div>
+                </div>
+                <div class="pw-test-show">
+                    <input id="pw-test-show" type="checkbox" checked>
+                    <label for="pw-test-show">Show password</label>
+                </div>
+            </div>
+
+            <a href="https://blogs.dropbox.com/tech/2012/04/zxcvbn-realistic-password-strength-estimation" title="More information" target="_blank" class="more-info icon-info"></a>
+
+        </section>
+
+        <section class="pp-generator tool">
+
+            <div class="pp-generator-header">
+                <h3>Passphrase Generator</h3>
+                <!--
+                This passphrase generator adapted from
+                https://www.fourmilab.ch/javascrypt/pass_phrase.html
+                -->
+            </div>
+
+            <form id="pp-generator-form" class="pp-generator-form" name="results">
+                <input id="pp-generator-output" class="pp-generator-output" type="text" name="text" data-howlong="4" data-howmany="1" data-bits="58" spellcheck="false">
+                <input id="pp-generator-submit" class="pp-generator-submit" type="button" name="generate" value="Generate Passphrase">
+            </form>
+
+            <a href="http://xkcd.com/936" title="More information" target="_blank" class="more-info icon-info"></a>
+
+        </section>
+
+        <section id="pw-generator" class="pw-generator tool">
+
+            <div class="pw-generator-header">
+                <!--
+                Strong Password Generator adapted from
+                https://github.com/aleksandr-rakov/password-generator
+                -->
+                <h3 class="pw-generator-heading">
+                    <a id="pw-type-current" class="pw-type-current" href="#">Strong</a>
+                    <span id="pw-type-options" class="type-options">
+                        <span class="type-option-item active"><a class="type-option" href="#pw-generator-strong">Strong</a></span>
+                        <span class="type-option-item memorable"><a class="type-option" href="#pw-generator-mem">Memorable</a></span>
+                    </span>
+                    Password Generator
+                </h3>
+            </div>
+
+            <div id="pw-generator-strong" class="pw-generator-strong pw-generator-type">
+                <div class="pw-generator-options">
+                    <label for="length">Number of Characters</label>
+                    <input type="range" id="pw-length-input" class="pw-length-input" name="length" min="14" value="14" max="24" step="1" onchange="outputUpdate(value)">
+                    <output for="length" id="pw-length-output" class="pw-length-output">14</output>
+                </div>
+                <input class="pw-generator-output" type="text" id="pw-generator-output" spellcheck="false">
+                <input class="pw-generator-submit" type="submit" id="pw-generator-submit" value="Generate Password">
+            </div>
+
+            <div id="pw-generator-mem" class="pw-generator-mem pw-generator-type">
+                <input class="pw-generator-mem-output" type="text" id="pw-generator-mem-output" spellcheck="false">
+                <input class="pw-generator-mem-submit" type="submit" id="pw-generator-mem-submit" value="Generate Password">
+            </div>
+
+        </section>
+
+    </div>
+
+    <footer class="site-footer">
+        <a href="https://vtldesign.com/" rel="nofollow"><img class="logo" src="img/vital-logo-watermark.png" alt="Maade by Vital"></a>
+    </footer>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+
+    <!-- Password Test -->
+    <script src="js/test/zxcvbn.js"></script>
+    <script src="js/test/jquery.password.strength.min.js"></script>
+    <script src="js/test/hideShowPassword.min.js"></script>
+
+    <!-- Passphrase Generator -->
+    <script src="js/generator/passphrase.min.js"></script>
+    <script src="js/generator/wordtab.js"></script>
+
+    <script src="js/fastclick.min.js"></script>
+    <script src="js/main.js"></script>
+
+    <!--[if lt IE 9]>
+        <script>
+        var $buoop = {
+            c:2,
+            reminder: 0,
+            text: "Your browser (%s) is incredibly out-of-date. Not only does this site not support it, but it lacks the latest security features found in modern browsers. Please <a%s>update your browser</a> or tell your IT department!"
+        };
+        function $buo_f(){
+         var e = document.createElement("script");
+         e.src = "//browser-update.org/update.js";
+         document.body.appendChild(e);
+        };
+        try {document.addEventListener("DOMContentLoaded", $buo_f,false)}
+        catch(e){window.attachEvent("onload", $buo_f)}
+        </script>
+    <![endif]-->
+
+</body>
+</html>
