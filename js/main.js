@@ -169,7 +169,48 @@ function Generate_seed() {
 
 
 /**
- * Password Generator
+ * Password Generator Toggle
+ */
+
+jQuery(document).ready(function ($) {
+
+    var $toggle     = $('#pw-type-current'),
+        $options    = $('#pw-type-options'),
+        $optionItem = $('.type-option-item'),
+        $option     = $('.type-option'),
+        $parent     = $('#pw-generator');
+
+    $toggle.on('click', function(event) {
+        event.preventDefault();
+
+        if ($parent.hasClass('toggle-active')) {
+            $parent.removeClass('toggle-active');
+        } else {
+            $parent.addClass('toggle-active');
+        }
+    });
+
+    $option.on('click', function(event) {
+        event.preventDefault();
+
+        var $el  = $(this),
+            type = $el.attr('href').slice(1),
+            text = $el.text();
+
+        $parent.removeClass('toggle-active');
+        $toggle.text(text);
+        $optionItem.removeClass('active');
+        $el.closest($optionItem).addClass('active');
+        $('.pw-generator-type').hide();
+        $('#' + type).show();
+
+    });
+
+});
+
+
+/**
+ * Password Generator (Strong)
  * https://github.com/aleksandr-rakov/password-generator
  */
 
@@ -230,7 +271,65 @@ function GeneratePassword(length, arg1, arg2, arg3, arg4) {
 }
 
 function getRandomNum(cnt) {
-    var rndNum = Math.random();
+    var rndNum = Math.random()
     rndNum = parseInt(rndNum * cnt);
     return rndNum;
 }
+
+
+/**
+ * Password Generator (Memorable)
+ * http://www.dinopass.com/api
+ */
+
+var memPassordSubmit = document.getElementById('pw-generator-mem-submit'),
+    memPasswordOutput = document.getElementById('pw-generator-mem-output');
+
+memPasswordOutput.addEventListener('click', function() {
+    this.select();
+});
+
+function getMemorablePassword() {
+
+    var request = new XMLHttpRequest();
+
+    request.open('GET', 'http://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=true&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=4&maxLength=4&limit=2&api_key=e6243ae1ce542700b82e51599530d5e76669c3e585635f6b7', true);
+
+    request.onload = function() {
+
+        var pw = '';
+
+        if (request.status >= 200 && request.status < 400) {
+
+            var data = JSON.parse(request.responseText);
+
+            for (var i in data) {
+                pw += data[i].word;
+            }
+
+            pw += Math.floor(Math.random() * 90 + 10);
+
+            memPasswordOutput.value = pw;
+
+        } else {
+
+            memPasswordOutput.value = "Damn thing is busted.";
+
+        }
+    };
+
+    request.onerror = function() {
+        memPasswordOutput.value = "Damn thing is busted.";
+    };
+
+    request.send();
+
+}
+
+jQuery(document).ready(function ($) {
+
+    getMemorablePassword();
+
+});
+
+memPassordSubmit.addEventListener('click', getMemorablePassword);
