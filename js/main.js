@@ -167,48 +167,6 @@ function Generate_seed() {
     delete prng;
 }
 
-
-/**
- * Password Generator Toggle
- */
-
-jQuery(document).ready(function ($) {
-
-    var $toggle     = $('#pw-type-current'),
-        $options    = $('#pw-type-options'),
-        $optionItem = $('.type-option-item'),
-        $option     = $('.type-option'),
-        $parent     = $('#pw-generator');
-
-    $toggle.on('click', function(event) {
-        event.preventDefault();
-
-        if ($parent.hasClass('toggle-active')) {
-            $parent.removeClass('toggle-active');
-        } else {
-            $parent.addClass('toggle-active');
-        }
-    });
-
-    $option.on('click', function(event) {
-        event.preventDefault();
-
-        var $el  = $(this),
-            type = $el.attr('href').slice(1),
-            text = $el.text();
-
-        $parent.removeClass('toggle-active');
-        $toggle.text(text);
-        $optionItem.removeClass('active');
-        $el.closest($optionItem).addClass('active');
-        $('.pw-generator-type').hide();
-        $('#' + type).show();
-
-    });
-
-});
-
-
 /**
  * Password Generator (Strong)
  * https://github.com/aleksandr-rakov/password-generator
