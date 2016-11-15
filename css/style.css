@@ -386,54 +386,10 @@ h3 {
 .pw-generator-heading {
     display: inline-block;
     position: relative;
+    margin-top: 2em;
 }
-.pw-type-current {
-    display: inline-block;
-    padding: .125em .5em;
-    background: #fff;
-    border-radius: 4px;
-    box-shadow: 0 0 5px rgba(0,0,0,.2);
-    cursor: pointer;
-    color: #404040;
-    -webkit-transition: all 100ms linear;
-            transition: all 100ms linear;
-}
-.pw-type-current:hover {
-    color: #ff7200;
-}
-.toggle-active .pw-type-current {
-    border-radius: 4px 4px 0 0;
-}
-.pw-generator .type-options {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    min-width: 156px;
-    background: #fff;
-    box-shadow: 0 2px 3px rgba(0,0,0,.2);
-    border-radius: 0 4px 4px 4px;
-    text-align: left;
-}
-.toggle-active .type-options {
-    display: block;
-}
-.pw-generator .type-option-item {
-    display: block;
-}
-.pw-generator .type-option-item.active {
-    display: none;
-}
-.pw-generator .type-option {
-    display: block;
-    padding: .3em .5em;
-    color: #404040;
-    line-height: 1;
-    -webkit-transition: all 100ms linear;
-            transition: all 100ms linear;
-}
-.pw-generator .type-option:hover {
-    color: #ff7200;
+.pw-generator-header:first-child .pw-generator-heading {
+    margin-top: 0;
 }
 .pw-generator-options {
     width: 80%;
@@ -511,7 +467,6 @@ h3 {
     }
 }
 .pw-generator-mem {
-    display: none;
     margin-top: 10px;
 }
 .pw-generator-mem-output {
