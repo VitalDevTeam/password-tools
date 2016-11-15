@@ -139,6 +139,9 @@ h3 {
 .site-header .logo {
     width: 120px;
 }
+.site-header path {
+    fill: #ff7200;
+}
 .site-footer {
     margin-top: 20px;
     text-align: center;
