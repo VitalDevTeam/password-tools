@@ -152,7 +152,18 @@ h3 {
 .tool {
     position: relative;
 }
+.tool-header {
+    padding: 0 5%;
+    text-align: center;
+}
+.tool-header p {
+    margin-top: 0.25em;
+    color: #bbb;
+    font-size: 0.75em;
+    line-height: 1.5;
+}
 .more-info {
+    display: none;
     position: absolute;
     top: 8%;
     right: 3%;
@@ -187,6 +198,12 @@ h3 {
     }
     .site-footer .logo {
         width: 80px;
+    }
+    .tool-header {
+        padding: 0;
+    }
+    .more-info {
+        display: block;
     }
 }
 @media (max-width: 480px) {
