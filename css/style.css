@@ -355,17 +355,9 @@ h3 {
     color: #fff;
 }
 .pw-test-score p {
-    padding: .5em 0;
-}
-.pw-test-show {
-    margin-top: .5em;
-    color: #bebebe;
-    font-size: .875em;
-    text-align: center;
-}
-.pw-test-show label,
-.pw-test-show input {
-    vertical-align: middle;
+    padding: 0.5em 0.375em;
+    font-size: 0.75em;
+    line-height: 1.5;
 }
 @media (min-width: 480px) {
 
@@ -382,8 +374,8 @@ h3 {
     .pw-test-input {
         font-size: 1.375em;
     }
-    .pw-test-show {
-        margin-top: 1em;
+    .pw-test-score p {
+        font-size: 1em;
     }
 }
 .pp-generator {

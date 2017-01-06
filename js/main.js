@@ -38,14 +38,6 @@ var passwordStrengthTest = (function($) {
             initializeStrengthMeter();
         });
 
-        // Toggle show password option by default
-        pwField.showPassword();
-
-        // Toggle show password on checkbox change
-        $('#pw-test-show').change(function() {
-            pwField.togglePassword();
-        });
-
         // If "test" URL parameter exists
         if (getQueryVar('test')) {
             setTimeout(function() {
