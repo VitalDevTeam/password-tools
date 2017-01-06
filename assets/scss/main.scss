@@ -44,7 +44,7 @@ h2, h3 {
 h2 {
     margin-top: 0.125em;
     font-size: 1.125em;
-    font-weight: normal;
+    font-weight: 300;
     text-transform: lowercase;
 
     @media (min-width: 30em) {
@@ -149,7 +149,7 @@ h3 {
 
     p {
         margin-top: 0.25em;
-        color: #bbb;
+        color: #999;
         font-size: 0.75em;
         line-height: 1.5;
     }
@@ -161,7 +161,6 @@ h3 {
     top: 8%;
     right: 3%;
     z-index: 1;
-    color: #a8a8a8;
     font-size: 1.25em;
     transition: color 100ms linear;
 
@@ -169,8 +168,21 @@ h3 {
         display: block;
     }
 
+    svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    path {
+        fill: #a8a8a8;
+        transition: fill 100ms ease-out;
+    }
+
     &:hover {
-        color: #f17d24;
+
+        path {
+            fill: #f17d24;
+        }
     }
 }
 
@@ -287,6 +299,7 @@ h3 {
     border-radius: 5px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
     font-size: 1.125em;
+    font-weight: 300;
     text-align: center;
     transition: all 200ms linear;
 
@@ -299,15 +312,15 @@ h3 {
     }
 
     &::-webkit-input-placeholder {
-        color: #5d5d5d;
+        color: #999;
     }
 
     &::-moz-placeholder {
-        color: #5d5d5d;
+        color: #999;
     }
 
     &:-ms-input-placeholder {
-        color: #5d5d5d;
+        color: #999;
     }
 }
 
@@ -317,7 +330,7 @@ h3 {
     line-height: 1.5;
 
     @media (min-width: 30em) {
-        font-size: 1em;
+        font-size: 0.875em;
     }
 }
 
@@ -363,6 +376,7 @@ h3 {
     cursor: pointer;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
     font-size: 1em;
+    font-weight: 300;
     text-align: center;
 
     @media (min-width: 30em) {
@@ -445,7 +459,8 @@ h3 {
     }
 
     label {
-        color: #bebebe;
+        color: #999;
+        font-weight: bold;
     }
 }
 
@@ -470,6 +485,7 @@ h3 {
     cursor: pointer;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
     font-size: 1.125em;
+    font-weight: 300;
     text-align: center;
 
     @media (min-width: 30em) {
@@ -527,6 +543,7 @@ h3 {
     cursor: pointer;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
     font-size: 1.125em;
+    font-weight: 300;
     text-align: center;
 
     @media (min-width: 30em) {
