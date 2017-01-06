@@ -1,64 +1,10 @@
 /**
- * Password Strength Test
- * https://github.com/dropbox/zxcvbn
- */
-var passwordStrengthTest = (function($) {
-    var pwField;
-
-    /**
-     * Initialize the password strength meter
-     */
-    function initializeStrengthMeter() {
-        $('#pw-test-score').PasswordStrengthManager({
-            password: pwField.val(),
-            advancedStrength: true
-        });
-    }
-
-    /**
-     * Get URL parameters
-     * http://www.onlineaspect.com/2009/06/10/reading-get-variables-with-javascript/
-     *
-     * @param  {string} q Name of the parameter to get
-     * @param  {string} s Static URL as string to get the parameters.
-     *                    Leave empty to get current window location.
-     * @return {string}   Value of variable
-     */
-    function getQueryVar(q, s) {
-        s = s ? s : window.location.search;
-        var re = new RegExp('&'+q+'(?:=([^&]*))?(?=&|$)','i');
-        return (s=s.replace(/^\?/,'&').match(re)) ? (typeof s[1] === 'undefined' ? '' : decodeURIComponent(s[1])) : undefined;
-    }
-
-    function onDocumentReady() {
-        pwField = $('#pw-test-input');
-
-        // Initialize meter on key-up
-        pwField.keyup(function() {
-            initializeStrengthMeter();
-        });
-
-        // If "test" URL parameter exists
-        if (getQueryVar('test')) {
-            setTimeout(function() {
-                $('.pw-test').addClass('pulse');
-            }, 600);
-            pwField.val(getQueryVar('test'));
-            initializeStrengthMeter();
-        }
-
-    }
-
-    $(onDocumentReady);
-
-})(jQuery);
-
-
-/**
  * Passphrase Generator
  * https://www.fourmilab.ch/javascrypt/pass_phrase.html
  */
 var passPhraseGenerator = (function($) {
+    /* jshint ignore:start */
+
     var pageBody, prng, seed;
 
     function vitalPassphraseGenerate() {
@@ -164,6 +110,7 @@ var passPhraseGenerator = (function($) {
         delete prng;
     }
 
+
     function onDocumentReady() {
         pageBody = document.getElementById('page-body');
 
@@ -191,17 +138,69 @@ var passPhraseGenerator = (function($) {
         });
     }
 
+
     $(onDocumentReady);
+
+    /* jshint ignore:end */
 
 })(jQuery);
 
+/**
+ * Password Generator (Memorable)
+ * http://www.dinopass.com/api
+ */
+var passwordGeneratorMemorable = (function($) {
+    var memPassordSubmit, memPasswordOutput;
+
+    function getMemorablePassword() {
+        var request = new XMLHttpRequest();
+
+        request.open('GET', 'http://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=true&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=4&maxLength=4&limit=2&api_key=e6243ae1ce542700b82e51599530d5e76669c3e585635f6b7', true);
+
+        request.onload = function() {
+            var pw = '';
+            if (request.status >= 200 && request.status < 400) {
+                var data = JSON.parse(request.responseText);
+                for (var i in data) { // jshint ignore:line
+                    pw += data[i].word;
+                }
+                pw += Math.floor(Math.random() * 90 + 10);
+                memPasswordOutput.value = pw;
+            } else {
+                memPasswordOutput.value = "Damn thing is busted.";
+            }
+        };
+
+        request.onerror = function() {
+            memPasswordOutput.value = "Damn thing is busted.";
+        };
+
+        request.send();
+    }
+
+    function onDocumentReady() {
+        memPassordSubmit = document.getElementById('pw-generator-mem-submit');
+        memPasswordOutput = document.getElementById('pw-generator-mem-output');
+
+        getMemorablePassword();
+
+        memPasswordOutput.addEventListener('click', function() {
+            this.select();
+        });
+
+        memPassordSubmit.addEventListener('click', getMemorablePassword);
+    }
+
+    $(onDocumentReady);
+
+})(jQuery);
 
 /**
  * Password Generator (Strong)
  * https://github.com/aleksandr-rakov/password-generator
  */
 var passwordGeneratorStrong = (function($) {
-    var ret = {}, pw_len;
+    var ret = {};
 
     // Show output of length slider input
     function outputUpdate(vol) {
@@ -214,7 +213,7 @@ var passwordGeneratorStrong = (function($) {
     }
 
     function genpw(id, plen, arg1, arg2, arg3, arg4) {
-        obj = document.getElementById(id);
+        var obj = document.getElementById(id);
         obj.value = GeneratePassword(plen,arg1,arg2,arg3,arg4);
     }
 
@@ -231,15 +230,15 @@ var passwordGeneratorStrong = (function($) {
         if (arg3) { str=str+str3; }
         if (arg4) { str=str+str4; }
 
-        for (i=0; i < length; i++) {
-            j = getRandomNum(str.length);
+        for (var i = 0; i < length; i++) {
+            var j = getRandomNum(str.length);
             res = res + str.charAt(j);
         }
         return res;
     }
 
     function getRandomNum(cnt) {
-        var rndNum = Math.random()
+        var rndNum = Math.random();
         rndNum = parseInt(rndNum * cnt);
         return rndNum;
     }
@@ -275,49 +274,54 @@ var passwordGeneratorStrong = (function($) {
 })(jQuery);
 
 /**
- * Password Generator (Memorable)
- * http://www.dinopass.com/api
+ * Password Strength Test
+ * https://github.com/dropbox/zxcvbn
  */
-var passwordGeneratorMemorable = (function($) {
-    var memPassordSubmit, memPasswordOutput;
+var passwordStrengthTest = (function($) {
+    var pwField;
 
-    function getMemorablePassword() {
-        var request = new XMLHttpRequest();
+    /**
+     * Initialize the password strength meter
+     */
+    function initializeStrengthMeter() {
+        $('#pw-test-score').PasswordStrengthManager({
+            password: pwField.val(),
+            advancedStrength: true
+        });
+    }
 
-        request.open('GET', 'http://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=true&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=4&maxLength=4&limit=2&api_key=e6243ae1ce542700b82e51599530d5e76669c3e585635f6b7', true);
-
-        request.onload = function() {
-            var pw = '';
-            if (request.status >= 200 && request.status < 400) {
-                var data = JSON.parse(request.responseText);
-                for (var i in data) {
-                    pw += data[i].word;
-                }
-                pw += Math.floor(Math.random() * 90 + 10);
-                memPasswordOutput.value = pw;
-            } else {
-                memPasswordOutput.value = "Damn thing is busted.";
-            }
-        };
-
-        request.onerror = function() {
-            memPasswordOutput.value = "Damn thing is busted.";
-        };
-
-        request.send();
+    /**
+     * Get URL parameters
+     * http://www.onlineaspect.com/2009/06/10/reading-get-variables-with-javascript/
+     *
+     * @param  {string} q Name of the parameter to get
+     * @param  {string} s Static URL as string to get the parameters.
+     *                    Leave empty to get current window location.
+     * @return {string}   Value of variable
+     */
+    function getQueryVar(q, s) {
+        s = s ? s : window.location.search;
+        var re = new RegExp('&'+q+'(?:=([^&]*))?(?=&|$)','i');
+        return (s=s.replace(/^\?/,'&').match(re)) ? (typeof s[1] === 'undefined' ? '' : decodeURIComponent(s[1])) : undefined;
     }
 
     function onDocumentReady() {
-        memPassordSubmit = document.getElementById('pw-generator-mem-submit');
-        memPasswordOutput = document.getElementById('pw-generator-mem-output');
+        pwField = $('#pw-test-input');
 
-        getMemorablePassword();
-
-        memPasswordOutput.addEventListener('click', function() {
-            this.select();
+        // Initialize meter on key-up
+        pwField.keyup(function() {
+            initializeStrengthMeter();
         });
 
-        memPassordSubmit.addEventListener('click', getMemorablePassword);
+        // If "test" URL parameter exists
+        if (getQueryVar('test')) {
+            setTimeout(function() {
+                $('.pw-test').addClass('pulse');
+            }, 600);
+            pwField.val(getQueryVar('test'));
+            initializeStrengthMeter();
+        }
+
     }
 
     $(onDocumentReady);

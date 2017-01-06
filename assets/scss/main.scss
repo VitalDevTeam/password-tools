@@ -1,0 +1,566 @@
+@import 'animations';
+@import 'reset';
+
+/*  ==========================================================================
+     BASE
+    ==========================================================================  */
+
+::selection {
+    background: #f17d24;
+    color:#fff;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
+body {
+    padding: 0 0 3.75em;
+    position: relative;
+    background: #f5f5f5;
+    color: #404040;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1.25;
+
+    @media (min-width: 30em) {
+        background: #ebebeb;
+        padding: 0 5% 3.75em;
+    }
+}
+
+a {
+    color: #f17d24;
+    text-decoration: none;
+}
+
+h2, h3 {
+    text-align: center;
+}
+
+h2 {
+    margin-top: 0.125em;
+    font-size: 1.125em;
+    font-weight: normal;
+    text-transform: lowercase;
+
+    @media (min-width: 30em) {
+        font-size: 1.625em;
+    }
+}
+
+h3 {
+    font-size: 1.125em;
+
+    @media (min-width: 30em) {
+        font-size: 1.5em;
+    }
+}
+
+.screen-reader-text {
+    position: absolute !important;
+    clip: rect(1px 1px 1px 1px);
+    clip: rect(1px, 1px, 1px, 1px);
+}
+
+.group:before,
+.group:after { content: " "; display: table; }
+.group:after { clear: both; }
+
+/*  ==========================================================================
+     LAYOUT
+    ==========================================================================  */
+
+.main,
+.site-header,
+.site-footer {
+    max-width: 33.75em;
+    margin: 0 auto;
+}
+
+.main {
+    margin-top: 3.125em;
+
+    @media (min-width: 30em) {
+        margin-top: 0;
+    }
+}
+
+.site-header {
+    margin-top: 1.25em;
+    text-align: center;
+
+    @media (min-width: 30em) {
+        margin-top: 2.5em;
+    }
+
+    .logo {
+        width: 120px;
+        height: 47px;
+
+        @media (min-width: 30em) {
+            width: 180px;
+            height: 66px;
+        }
+    }
+
+    path {
+        fill: #f17d24;
+    }
+}
+
+.site-footer {
+    margin-top: 1.25em;
+    text-align: center;
+
+    @media (min-width: 30em) {
+        margin-top: 2.5em;
+    }
+
+    .logo {
+        width: 60px;
+        height: 23px;
+
+        @media (min-width: 30em) {
+            width: 80px;
+            height: 31px;
+        }
+    }
+}
+
+/*  ==========================================================================
+     TOOLS
+    ==========================================================================  */
+
+.tool {
+    position: relative;
+}
+
+.tool-header {
+    padding: 0 5%;
+    text-align: center;
+
+    @media (min-width: 30px) {
+        padding: 0;
+    }
+
+    p {
+        margin-top: 0.25em;
+        color: #bbb;
+        font-size: 0.75em;
+        line-height: 1.5;
+    }
+}
+
+.more-info {
+    display: none;
+    position: absolute;
+    top: 8%;
+    right: 3%;
+    z-index: 1;
+    color: #a8a8a8;
+    font-size: 1.25em;
+    transition: color 100ms linear;
+
+    @media (min-width: 30em) {
+        display: block;
+    }
+
+    &:hover {
+        color: #f17d24;
+    }
+}
+
+/*   Tools - Password Strength Test
+    --------------------------------------------------------------------------  */
+
+.pw-test {
+    margin: 0 3%;
+    animation-duration: 1000ms;
+    animation-fill-mode: both;
+
+    @media (min-width: 30em) {
+        margin: 1.875em auto 0;
+        padding: 1em;
+        background: #f5f5f5;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    &.pulse {
+        animation-name: tada;
+    }
+}
+
+.pw-test-field {
+    margin-top: 0.625em;
+
+    @media (min-width: 30em) {
+        margin-top: 1.25em;
+    }
+
+    &[data-score] .pw-test-input {
+        border-radius: 5px 5px 0 0;
+    }
+
+    &[data-score="0"] {
+
+        .pw-test-input {
+            background: #fec0c1;
+        }
+
+        .pw-test-results-wrap {
+            background: #f00;
+            color: #fff;
+        }
+    }
+
+    &[data-score="1"] {
+
+        .pw-test-input {
+            background: #ffddad;
+        }
+
+        .pw-test-results-wrap {
+            background: #f90;
+            color: #fff;
+        }
+    }
+
+    &[data-score="2"] {
+
+        .pw-test-input {
+            background: #ffeead;
+        }
+
+        .pw-test-results-wrap {
+            background: #fc0;
+            color: #b38400;
+        }
+    }
+
+    &[data-score="3"] {
+
+        .pw-test-input {
+            background: #def595;
+        }
+
+        .pw-test-results-wrap {
+            background: #ace600;
+            color: #537e00;
+        }
+    }
+
+    &[data-score="4"] {
+
+        .pw-test-input {
+            background: #abeea8;
+        }
+
+        .pw-test-results-wrap {
+            background: #0c0;
+            color: #fff;
+        }
+    }
+}
+
+.pw-test-input-wrap {
+    position: relative;
+}
+
+.pw-test-results-wrap {
+    background: #dfdfdf;
+    border-radius: 0 0 5px 5px;
+    text-align: center;
+    transition: all 200ms linear;
+}
+
+.pw-test-input {
+    width: 100%;
+    margin: 0;
+    padding: 0.75em 1em;
+    background: #dfdfdf;
+    border: 0;
+    border-radius: 5px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+    font-size: 1.125em;
+    text-align: center;
+    transition: all 200ms linear;
+
+    @media (min-width: 30em) {
+        font-size: 1.375em;
+    }
+
+    &:focus {
+        outline: 0;
+    }
+
+    &::-webkit-input-placeholder {
+        color: #5d5d5d;
+    }
+
+    &::-moz-placeholder {
+        color: #5d5d5d;
+    }
+
+    &:-ms-input-placeholder {
+        color: #5d5d5d;
+    }
+}
+
+.pw-test-score p {
+    padding: 0.5em 0.375em;
+    font-size: 0.75em;
+    line-height: 1.5;
+
+    @media (min-width: 30em) {
+        font-size: 1em;
+    }
+}
+
+/*   Tools - Passphrase Generator
+    --------------------------------------------------------------------------  */
+
+.pp-generator {
+    margin-top: 1.875em;
+    padding: 1.875em 3% 0;
+    border-top: 1px solid #dfdfdf;
+
+    @media (min-width: 30em) {
+        margin-top: 2.5em;
+        padding: 1em;
+        background: #f5f5f5;
+        border-top: 0;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+}
+
+.pp-generator-seed-result {
+    display: block;
+    width: 100%;
+}
+
+.pp-generator-form {
+    margin-top: 0.625em;
+
+    @media (min-width: 30em) {
+        margin-top: 1.25em;
+    }
+}
+
+.pp-generator-output {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0.75em 1em;
+    background: #dfdfdf;
+    border: 0;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+    font-size: 1em;
+    text-align: center;
+
+    @media (min-width: 30em) {
+        font-size: 1.375em;
+    }
+
+    &:focus {
+        outline: 0;
+    }
+}
+
+.pp-generator-submit {
+    display: block;
+    width: 100%;
+    margin-top: 0.5em;
+    padding: 0.5em 1em;
+    background: #404040;
+    border: 0;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 0.875em;
+    font-weight: 700;
+    text-transform: uppercase;
+    transition: all 100ms linear;
+
+    @media (min-width: 30em) {
+        font-size: 1em;
+    }
+
+    &:hover {
+        background: #f17d24;
+    }
+
+    &:focus {
+        outline: 0;
+    }
+}
+
+/*   Tools - Password Generator
+    --------------------------------------------------------------------------  */
+
+.pw-generator {
+    margin-top: 1.875em;
+    padding: 1.875em 3% 0;
+    border-top: 1px solid #dfdfdf;
+
+    @media (min-width: 30em) {
+        margin-top: 2.5em;
+        padding: 0;
+        padding: 1em;
+        background: #f5f5f5;
+        border-top: 0;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+}
+
+.pw-generator-header {
+    text-align: center;
+
+    &:first-child .pw-generator-heading {
+        margin-top: 0;
+    }
+}
+
+.pw-generator-heading {
+    display: inline-block;
+    position: relative;
+    margin-top: 2em;
+}
+
+.pw-generator-options {
+    width: 80%;
+    margin: 1.25em auto 0.625em;
+    text-align: center;
+
+    @media (min-width: 30em) {
+        width: auto;
+        margin: 1.875em 0 0.625em;
+    }
+
+    label {
+        color: #bebebe;
+    }
+}
+
+.pw-length-input {
+    display: inline-block;
+    width: 90%;
+    cursor: pointer;
+}
+
+.pw-length-output {
+    display: inline-block;
+}
+
+.pw-generator-output {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0.75em 1em;
+    background: #dfdfdf;
+    border: 0;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+    font-size: 1.125em;
+    text-align: center;
+
+    @media (min-width: 30em) {
+        font-size: 1.375em;
+    }
+
+    &:focus {
+        outline: 0;
+    }
+}
+
+.pw-generator-submit {
+    display: block;
+    width: 100%;
+    margin-top: 0.5em;
+    padding: 0.5em 1em;
+    background: #404040;
+    border: 0;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 0.875em;
+    font-weight: 700;
+    text-transform: uppercase;
+    transition: all 100ms linear;
+
+    @media (min-width: 30em) {
+        font-size: 1em;
+    }
+
+    &:hover {
+        background: #f17d24;
+    }
+
+    &:focus {
+        outline: 0;
+    }
+}
+
+.pw-generator-mem {
+    margin-top: 0.625em;
+
+    @media (min-width: 30em) {
+        margin-top: 1.875em;
+    }
+}
+
+.pw-generator-mem-output {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0.75em 1em;
+    background: #dfdfdf;
+    border: 0;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+    font-size: 1.125em;
+    text-align: center;
+
+    @media (min-width: 30em) {
+        font-size: 1.375em;
+    }
+
+    &:focus {
+        outline: 0;
+    }
+}
+
+.pw-generator-mem-submit {
+    display: block;
+    width: 100%;
+    margin-top: 0.5em;
+    padding: 0.5em 1em;
+    background: #404040;
+    border: 0;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 0.875em;
+    font-weight: 700;
+    text-transform: uppercase;
+    transition: all 100ms linear;
+
+    @media (min-width: 30em) {
+        font-size: 1em;
+    }
+
+    &:hover {
+        background: #f17d24;
+    }
+
+    &:focus {
+        outline: 0;
+    }
+}
