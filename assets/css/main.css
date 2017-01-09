@@ -80,6 +80,8 @@ button, input, optgroup, select, textarea {
 select, textarea, button, html input[type="button"], input[type="reset"],
 input[type="submit"], input[type="text"], input[type="url"], input[type="email"],
 input[type="tel"], input[type="number"], input[type="search"], input[type="password"] {
+  -moz-appearance: none;
+  -webkit-appearance: none;
   appearance: none;
 }
 
@@ -358,7 +360,7 @@ h3 {
   border: 0;
   border-radius: 5px;
   color: #fff;
-  font-size: 0.875em;
+  font-size: 0.75em;
   font-weight: 700;
   text-transform: uppercase;
   transition: all 100ms linear;
@@ -438,7 +440,7 @@ h3 {
   border: 0;
   border-radius: 5px;
   color: #fff;
-  font-size: 0.875em;
+  font-size: 0.75em;
   font-weight: 700;
   text-transform: uppercase;
   transition: all 100ms linear;
@@ -481,7 +483,7 @@ h3 {
   border: 0;
   border-radius: 5px;
   color: #fff;
-  font-size: 0.875em;
+  font-size: 0.75em;
   font-weight: 700;
   text-transform: uppercase;
   transition: all 100ms linear;
