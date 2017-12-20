@@ -580,4 +580,8 @@ h3 {
     &:focus {
         outline: 0;
     }
+
+	&[disabled='true'] {
+		background: #dfdfdf;
+	}
 }
