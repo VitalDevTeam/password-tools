@@ -62,6 +62,11 @@ var passwordGeneratorStrong = (function($) {
             refreshpw();
         });
 
+		// Generate password when Number of Characters input is changed
+		$('#pw-length-input').on('change', function(event) {
+			refreshpw();
+		});
+
     }
 
     ret = {
