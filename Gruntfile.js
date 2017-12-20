@@ -24,7 +24,7 @@ module.exports = function(grunt) {
                 },
                 options: {
                     watchTask: true,
-                    proxy: 'password.dev',
+                    proxy: 'password.local',
                     port: 1337
                 }
             }
