@@ -1,1 +1,343 @@
-var passPhraseGenerator=function(t){function e(){u(),a()}function n(){var t,e=document.results.text.getAttribute("data-seed"),n="0123456789abcdefABCDEF",r="",o=!1;for(t=0;t<e.length;t++){var a=e.charAt(t);n.indexOf(a)>=0?r+=a:o=!0}if(o&&alert("Error: Improper character(s) in hexadecimal key."),r.length>keySizeInBits/4)alert("Warning: hexadecimal key exceeds "+keySizeInBits/4+" digit maximum; truncated.");else for(;r.length<keySizeInBits/4;)r+="0";d=hexToByteArray(r)}function r(t,e){return t>=minw&&t<=maxw&&e>=0&&e<nwords[t]?cwords[t].substring(t*e,t*(e+1)):""}function o(t){if(t>=0&&t<twords){var e;for(e=minw;e<=maxw&&!(t<nwords[e]);e++)t-=nwords[e];return r(e,t)}return""}function a(){var t;for(n(),c=new AESprng(d),document.results.text.value="",t=0;t<1;t++){for(var e="",r=0;r<document.results.text.getAttribute("data-howlong");)e.length>0&&(e+=" "),e+=o(c.nextInt(twords)),r++;document.results.text.value+=e+"\n"}delete c}function u(){var t,e="";addEntropyTime();var n=keyFromEntropy(),r=new AESprng(n);for(t=0;t<64;t++)e+="0123456789ABCDEF".charAt(r.nextInt(15));document.results.text.setAttribute("data-seed",e),delete r}function i(){s=document.getElementById("page-body"),ce(),mouseMotionEntropy(60),e(),s.addEventListener("click",ce),t("#pp-generator-form").on("submit",function(t){t.preventDefault()}),document.getElementById("pp-generator-output").addEventListener("click",function(){this.select()}),t("#pp-generator-submit").on("click",function(){e()})}var s,c,d;t(i)}(jQuery),passwordGeneratorMemorable=function(t){function e(){var t=new XMLHttpRequest;t.open("GET","http://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=true&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=4&maxLength=4&limit=2&api_key=e6243ae1ce542700b82e51599530d5e76669c3e585635f6b7",!0),t.onload=function(){var e="";if(t.status>=200&&t.status<400){var n=JSON.parse(t.responseText);for(var a in n)e+=n[a].word+"-";e+=Math.floor(90*Math.random()+10),o.value=e,r.removeAttribute("disabled")}else o.value="Damn thing is busted.",r.removeAttribute("disabled")},t.onerror=function(){o.value="Damn thing is busted."},t.send()}function n(){r=document.getElementById("pw-generator-mem-submit"),o=document.getElementById("pw-generator-mem-output"),e(),o.addEventListener("click",function(){this.select()}),r.addEventListener("click",function(){r.setAttribute("disabled","true"),e()})}var r,o;t(n)}(jQuery),passwordGeneratorStrong=function(t){function e(t){document.getElementById("pw-length-output").innerHTML=t}function n(){r("pw-generator-output",document.getElementById("pw-length-output").innerHTML,"arg1","arg2","arg3","arg4")}function r(t,e,n,r,a,u){document.getElementById(t).value=o(e,n,r,a,u)}function o(t,e,n,r,o){var u="",i="";e&&(i+="qwertyuioplkjhgfdsazxcvbnm"),n&&(i+="QWERTYUIOPLKJHGFDSAZXCVBNM"),r&&(i+="1234567890"),o&&(i+="!@#$%^&*.,");for(var s=0;s<t;s++){var c=a(i.length);u+=i.charAt(c)}return u}function a(t){var e=Math.random();return e=parseInt(e*t)}function u(){n(),document.getElementById("pw-generator-output").addEventListener("click",function(){this.select()}),t("#pw-generator-submit").on("click",function(t){t.preventDefault(),n()}),t("#pw-length-input").on("change",function(t){n()})}var i={};return i={outputUpdate:function(t){return e(t)}},t(u),i}(jQuery),passwordStrengthTest=function(t){function e(){t("#pw-test-score").PasswordStrengthManager({password:o.val(),advancedStrength:!0})}function n(t,e){e=e||window.location.search;var n=new RegExp("&"+t+"(?:=([^&]*))?(?=&|$)","i");return(e=e.replace(/^\?/,"&").match(n))?void 0===e[1]?"":decodeURIComponent(e[1]):void 0}function r(){o=t("#pw-test-input"),o.keyup(function(){e()}),n("test")&&(setTimeout(function(){t(".pw-test").addClass("pulse")},600),o.val(n("test")),e())}var o;t(r)}(jQuery);
+/**
+ * Passphrase Generator
+ * https://www.fourmilab.ch/javascrypt/pass_phrase.html
+ */
+var passPhraseGenerator = (function($) {
+    /* jshint ignore:start */
+
+    var pageBody, prng, seed;
+
+    function vitalPassphraseGenerate() {
+        Generate_seed();
+        GeneratePassPhrases();
+    }
+
+    function setSeed() {
+        var s = document.results.text.getAttribute('data-seed');
+        var hexDigits = "0123456789abcdefABCDEF";
+        var hs = "", i, bogus = false;
+
+        for (i = 0; i < s.length; i++) {
+            var c = s.charAt(i);
+            if (hexDigits.indexOf(c) >= 0) {
+                hs += c;
+            } else {
+                bogus = true;
+            }
+        }
+        if (bogus) {
+            alert("Error: Improper character(s) in hexadecimal key.");
+        }
+        if (hs.length > (keySizeInBits / 4)) {
+            alert("Warning: hexadecimal key exceeds " + (keySizeInBits / 4) + " digit maximum; truncated.");
+            // document.seed.text.value = hs = hs.slice(0, 64);
+        } else {
+            while (hs.length < (keySizeInBits / 4)) {
+                hs += "0";
+            }
+        }
+        seed =  hexToByteArray(hs);
+    }
+
+    function retrieveWord(length, index) {
+        if ((length >= minw) && (length <= maxw) &&
+            (index >= 0) && (index < nwords[length])) {
+            return cwords[length].substring(length * index, length * (index + 1));
+        }
+        return "";
+    }
+
+    function indexWord(index) {
+        if ((index >= 0) && (index < twords)) {
+            var j;
+
+            for (j = minw; j <= maxw; j++) {
+            if (index < nwords[j]) {
+                break;
+            }
+            index -= nwords[j];
+            }
+            return retrieveWord(j, index);
+        }
+        return "";
+    }
+
+    function GeneratePassPhrases() {
+        var i, j, w;
+
+        setSeed();
+
+        prng = new AESprng(seed);
+
+        document.results.text.value = "";
+
+        for (i = 0; i < 1; i++) {
+
+            var k = "", nw = 0;
+
+            while (nw < document.results.text.getAttribute('data-howlong')) {
+
+                if (k.length > 0) {
+                    k += " ";
+                }
+                k += indexWord(prng.nextInt(twords));
+                nw++;
+            }
+
+            document.results.text.value += k + "\n";
+
+        }
+
+        delete prng;
+
+    }
+
+    function Generate_seed() {
+        var i, j, k = "";
+
+        addEntropyTime();
+        var seed = keyFromEntropy();
+
+        var prng = new AESprng(seed);
+        var hexDigits = "0123456789ABCDEF";
+
+        for (i = 0; i < 64; i++) {
+            k += hexDigits.charAt(prng.nextInt(15));
+        }
+
+        document.results.text.setAttribute('data-seed', k);
+
+        delete prng;
+    }
+
+
+    function onDocumentReady() {
+        pageBody = document.getElementById('page-body');
+
+        // Generate entropy and first passphrase on page load
+        ce();
+        mouseMotionEntropy(60);
+        vitalPassphraseGenerate();
+
+        // Generate entropy on all mouse clicks
+        pageBody.addEventListener('click', ce);
+
+        // Disable default form action
+        $('#pp-generator-form').on('submit', function(event) {
+            event.preventDefault();
+        });
+
+        var ppOutput = document.getElementById('pp-generator-output');
+        ppOutput.addEventListener('click', function() {
+            this.select();
+        });
+
+        // Generate passphrase on button click
+        $('#pp-generator-submit').on('click', function() {
+            vitalPassphraseGenerate();
+        });
+    }
+
+
+    $(onDocumentReady);
+
+    /* jshint ignore:end */
+
+})(jQuery);
+
+/**
+ * Password Generator (Memorable)
+ * http://www.dinopass.com/api
+ */
+var passwordGeneratorMemorable = (function($) {
+    var memPasswordSubmit, memPasswordOutput;
+
+	/**
+	 * Generates a random memorable password using the WornNik API
+	 */
+    function getMemorablePassword() {
+        var request = new XMLHttpRequest();
+
+        request.open('GET', 'https://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=true&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=4&maxLength=4&limit=2&api_key=e6243ae1ce542700b82e51599530d5e76669c3e585635f6b7', true);
+
+        request.onload = function() {
+            var pw = '',
+				specialChars = ['!', '@', '#', '$', '%', '&', '?'];
+            if (request.status >= 200 && request.status < 400) {
+                var data = JSON.parse(request.responseText);
+                for (var i in data) { // jshint ignore:line
+                    pw += data[i].word + '-';
+                }
+                pw += Math.floor(Math.random() * 90 + 10);
+                memPasswordOutput.value = pw;
+				memPasswordSubmit.removeAttribute('disabled');
+            } else {
+                memPasswordOutput.value = "Damn thing is busted.";
+				memPasswordSubmit.removeAttribute('disabled');
+            }
+        };
+
+        request.onerror = function() {
+            memPasswordOutput.value = "Damn thing is busted.";
+        };
+
+        request.send();
+    }
+
+    function onDocumentReady() {
+        memPasswordSubmit = document.getElementById('pw-generator-mem-submit');
+        memPasswordOutput = document.getElementById('pw-generator-mem-output');
+
+        getMemorablePassword();
+
+        memPasswordOutput.addEventListener('click', function() {
+            this.select();
+        });
+
+        memPasswordSubmit.addEventListener('click', function() {
+			memPasswordSubmit.setAttribute('disabled', 'true');
+			getMemorablePassword();
+		});
+    }
+
+    $(onDocumentReady);
+
+})(jQuery);
+
+/**
+ * Password Generator (Strong)
+ * https://github.com/aleksandr-rakov/password-generator
+ */
+var passwordGeneratorStrong = (function($) {
+    var ret = {};
+
+    // Show output of length slider input
+    function outputUpdate(vol) {
+        document.getElementById('pw-length-output').innerHTML = vol;
+    }
+
+    function refreshpw() {
+        var length = document.getElementById('pw-length-output').innerHTML;
+        genpw('pw-generator-output', length,'arg1','arg2','arg3','arg4');
+    }
+
+    function genpw(id, plen, arg1, arg2, arg3, arg4) {
+        var obj = document.getElementById(id);
+        obj.value = GeneratePassword(plen,arg1,arg2,arg3,arg4);
+    }
+
+    function GeneratePassword(length, arg1, arg2, arg3, arg4) {
+        var res = '';
+        var str='';
+        var str1='qwertyuioplkjhgfdsazxcvbnm';
+        var str2='QWERTYUIOPLKJHGFDSAZXCVBNM';
+        var str3='1234567890';
+        var str4='!@#$%^&*.,';
+
+        if (arg1) { str=str+str1; }
+        if (arg2) { str=str+str2; }
+        if (arg3) { str=str+str3; }
+        if (arg4) { str=str+str4; }
+
+        for (var i = 0; i < length; i++) {
+            var j = getRandomNum(str.length);
+            res = res + str.charAt(j);
+        }
+        return res;
+    }
+
+    function getRandomNum(cnt) {
+        var rndNum = Math.random();
+        rndNum = parseInt(rndNum * cnt);
+        return rndNum;
+    }
+
+    function onDocumentReady() {
+
+        // Generate password on page load
+        refreshpw();
+
+        var pwOutput = document.getElementById('pw-generator-output');
+        pwOutput.addEventListener('click', function() {
+            this.select();
+        });
+
+        // Generate password on button click
+        $('#pw-generator-submit').on('click', function(event) {
+            event.preventDefault();
+            refreshpw();
+        });
+
+		// Generate password when Number of Characters input is changed
+		$('#pw-length-input').on('change', function(event) {
+			refreshpw();
+		});
+
+    }
+
+    ret = {
+        outputUpdate: function(arg) {
+            return outputUpdate(arg);
+        }
+    };
+
+    $(onDocumentReady);
+
+    return ret;
+
+})(jQuery);
+
+/**
+ * Password Strength Test
+ * https://github.com/dropbox/zxcvbn
+ */
+var passwordStrengthTest = (function($) {
+    var pwField;
+
+    /**
+     * Initialize the password strength meter
+     */
+    function initializeStrengthMeter() {
+        $('#pw-test-score').PasswordStrengthManager({
+            password: pwField.val(),
+            advancedStrength: true
+        });
+    }
+
+    /**
+     * Get URL parameters
+     * http://www.onlineaspect.com/2009/06/10/reading-get-variables-with-javascript/
+     *
+     * @param  {string} q Name of the parameter to get
+     * @param  {string} s Static URL as string to get the parameters.
+     *                    Leave empty to get current window location.
+     * @return {string}   Value of variable
+     */
+    function getQueryVar(q, s) {
+        s = s ? s : window.location.search;
+        var re = new RegExp('&'+q+'(?:=([^&]*))?(?=&|$)','i');
+        return (s=s.replace(/^\?/,'&').match(re)) ? (typeof s[1] === 'undefined' ? '' : decodeURIComponent(s[1])) : undefined;
+    }
+
+    function onDocumentReady() {
+        pwField = $('#pw-test-input');
+
+        // Initialize meter on key-up
+        pwField.keyup(function() {
+            initializeStrengthMeter();
+        });
+
+        // If "test" URL parameter exists
+        if (getQueryVar('test')) {
+            setTimeout(function() {
+                $('.pw-test').addClass('pulse');
+            }, 600);
+            pwField.val(getQueryVar('test'));
+            initializeStrengthMeter();
+        }
+
+    }
+
+    $(onDocumentReady);
+
+})(jQuery);
